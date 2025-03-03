@@ -1,7 +1,7 @@
 # Task-Tracker-API
 Basic Python API testing covering backend, database, and API development
 
-The API has 4 methods (HTTP Requests): GET, POTS, PUT, DELETE
+The API has 4 methods (HTTP Requests): GET, PUT, PUT, DELETE
 
 It can be executed by typying:
 
@@ -37,4 +37,70 @@ Finally, the built image can be deployed:
 docker run -p 5000:5000 task-tracker
 ```
 
+## Mini Kubernetes (k8s)
+🚀 Kubernetes & Kubernetes Clusters Explained
+🔹 What is Kubernetes?
+
+Kubernetes (K8s) is an open-source container orchestration platform that automates:
+✅ Deployment of applications
+✅ Scaling apps up or down
+✅ Load balancing between multiple instances
+✅ Self-healing (restarts failed containers)
+
+Originally developed by Google, Kubernetes is now the industry standard for managing containerized applications.
+
+🔹 Why Use Kubernetes?
+
+    Before Kubernetes: You had to manually start, stop, and manage multiple Docker containers.
+    With Kubernetes: It automates everything—managing containers, scaling apps, and handling failures.
+
+ What is a Kubernetes Cluster?
+
+A Kubernetes cluster is a group of machines (physical or virtual) that run Kubernetes-managed applications.
+
+A cluster is made up of:
+
+| Component    | Description                                                               |
+| ------------ | ------------------------------------------------------------------------- |
+| Master Node  | The brain of Kubernetes; manages the cluster                              |
+| Worker Nodes | The machines where containers (Pods) run                                  |
+| Pods         | The smallest unit in Kubernetes, containing one or more Docker containers |
+
+When you deploy an app, Kubernetes does the following:
+1. Schedules it on a Worker Node
+2. Creates a Pod that runs your app’s container
+3. Manages networking & load balancing
+4. Monitors & restarts containers if they fail
+5. Scales up/down based on demand
+
+🔹 Example Cluster Setup
+```scss
+                Kubernetes Cluster
+        ┌────────────────────────────┐
+        │        Master Node         │
+        │ ───────────────────────── │
+        │  - API Server              │
+        │  - Scheduler               │
+        │  - Controller Manager      │
+        │  - etcd (Database)         │
+        └────────────────────────────┘
+                        │
+        ┌────────────────────────────────┐
+        │          Worker Nodes          │
+        │ ───────────────────────────── │
+        │ Pod 1  → [ App Container ]     │
+        │ Pod 2  → [ App Container ]     │
+        │ Pod 3  → [ App Container ]     │
+        └────────────────────────────────┘
+```
+
+🔥Summary
+
+| Concept      | What It Does                                                  |
+| ------------ | ------------------------------------------------------------- |
+| Kubernetes   | Manages & automates containerized applications                |
+| Cluster      | A group of machines running Kubernetes                        |
+| Master Node  | Controls & manages the cluster                                |
+| Worker Nodes | Run your app inside Pods                                      |
+| Pods         | The smallest unit in Kubernetes, containing Docker containers |
 
