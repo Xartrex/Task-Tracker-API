@@ -4,3 +4,9 @@ __pycache__/
 .DS_Store
 .git
 
+
+# Local SQLite databases are runtime data, not source code
+*.db
+instance/
+.pytest_cache/
+.ruff_cache/

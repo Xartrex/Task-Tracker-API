@@ -1,0 +1,4 @@
+# Tools needed only for development and CI, not inside the production image.
+-r requirements.txt
+pytest==8.3.5
+ruff==0.11.2

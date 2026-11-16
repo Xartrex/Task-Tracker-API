@@ -1,0 +1,13 @@
+# Files that should NOT be copied into the Docker image by `COPY . /app`
+.git
+.github
+myvenv
+tests
+__pycache__
+*.pyc
+*.db
+instance
+.pytest_cache
+.ruff_cache
+.serena
+requirements-dev.txt

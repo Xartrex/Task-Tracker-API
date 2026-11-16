@@ -1,7 +1,7 @@
 # Task-Tracker-API
 Basic Python API testing covering backend, database, and API development
 
-The API has 4 methods (HTTP Requests): GET, PUT, PUT, DELETE
+The API has 4 methods (HTTP Requests): GET, POST, PUT, DELETE
 
 It can be executed by typying:
 
@@ -19,6 +19,22 @@ curl -X DELETE http://127.0.0.1:5000/tasks/1
 curl -X GET http://127.0.0.1:5000/tasks
 ```
 
+
+## Testing
+Tests live in `tests/` and use **pytest** with Flask's built-in test client, so no server needs to be running.
+
+```bash
+python -m venv myvenv && source myvenv/bin/activate
+pip install -r requirements-dev.txt   # app deps + pytest + ruff
+ruff check .                          # lint: catches unused imports, typos, style issues
+pytest -v                             # run the test suite
+```
+
+Key ideas:
+- `tests/conftest.py` sets `DATABASE_URL=sqlite:///:memory:` **before** importing the app, so tests use a throwaway in-memory database instead of `database.db`.
+- The `client` fixture drops and recreates the tables before every test, so tests are independent of each other.
+- `requirements-dev.txt` holds tools needed only for development/CI, keeping the production image small. `.dockerignore` keeps tests, the venv and local DB files out of the image.
+
 ## Docker
 In order to create a docker container for the app, a Dockerfile must be created, specifying:
 - Python version
@@ -27,7 +43,7 @@ In order to create a docker container for the app, a Dockerfile must be created,
 - Port in which the app will be exposed, and therefore accessed
 - Command to be executed by the container: CMD ["python", "app.py"]
 
-After the creation of the Dockerfile, teh image of the container must be build before it can be deployed:
+After the creation of the Dockerfile, the image of the container must be build before it can be deployed:
 ```bash
 docker-buildx build -t task-tracker .
 ```
