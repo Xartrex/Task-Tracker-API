@@ -1,4 +1,6 @@
 # Task-Tracker-API
+[![CI](https://github.com/Xartrex/Task-Tracker-API/actions/workflows/ci.yml/badge.svg)](https://github.com/Xartrex/Task-Tracker-API/actions/workflows/ci.yml)
+
 Basic Python API testing covering backend, database, and API development
 
 The API has 4 methods (HTTP Requests): GET, POST, PUT, DELETE
@@ -34,6 +36,32 @@ Key ideas:
 - `tests/conftest.py` sets `DATABASE_URL=sqlite:///:memory:` **before** importing the app, so tests use a throwaway in-memory database instead of `database.db`.
 - The `client` fixture drops and recreates the tables before every test, so tests are independent of each other.
 - `requirements-dev.txt` holds tools needed only for development/CI, keeping the production image small. `.dockerignore` keeps tests, the venv and local DB files out of the image.
+
+
+## CI (Continuous Integration) with GitHub Actions
+CI means every change is checked automatically before it is trusted. The pipeline lives in `.github/workflows/ci.yml` and GitHub runs it on every push to `main`, on every pull request, or manually from the **Actions** tab ("Run workflow").
+
+Vocabulary:
+
+| Term | Meaning |
+| ---- | ------- |
+| Workflow | A YAML file in `.github/workflows/`; one automated process |
+| Trigger (`on:`) | The event that starts it (push, pull_request, manual...) |
+| Job | A group of steps running on its own fresh VM (a *runner*). Jobs run in parallel unless `needs:` says otherwise |
+| Step | One command (`run:`) or a reusable action (`uses:`), executed in order |
+| Action | A packaged step someone published, e.g. `actions/checkout` downloads the repo |
+
+Our pipeline:
+```
+push / PR
+   │
+   ▼
+[ test ]  checkout → setup Python 3.12 → pip install → ruff check → pytest
+   │ (only if green: needs: test)
+   ▼
+[ docker ] checkout → docker build → run container → curl / (smoke test)
+```
+If any step fails, the run turns red ❌, later steps are skipped and GitHub shows the error log. The badge at the top of this README shows the status of the latest run on `main`.
 
 ## Docker
 In order to create a docker container for the app, a Dockerfile must be created, specifying:
