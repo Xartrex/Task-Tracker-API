@@ -32,6 +32,29 @@ def test_create_task_without_title_is_rejected(client):
     assert client.get("/tasks").get_json() == []
 
 
+def test_get_task_by_id(client):
+    task_id = create(client, title="Read docs", description="Flask routing").get_json()["id"]
+
+    resp = client.get(f"/tasks/{task_id}")
+    assert resp.status_code == 200
+    assert resp.get_json() == {
+        "id": task_id, "title": "Read docs", "description": "Flask routing", "status": "Pending"
+    }
+
+
+def test_get_missing_task_returns_404(client):
+    resp = client.get("/tasks/999")
+    assert resp.status_code == 404
+    assert "error" in resp.get_json()
+
+
+def test_single_and_list_endpoints_use_same_shape(client):
+    # Guards the shared serializer (to_dict): if someone adds a field to one
+    # endpoint and forgets the other, this fails.
+    task_id = create(client, title="Same shape").get_json()["id"]
+    assert client.get(f"/tasks/{task_id}").get_json() == client.get("/tasks").get_json()[0]
+
+
 def test_update_task(client):
     task_id = create(client, title="Write tests").get_json()["id"]
 
